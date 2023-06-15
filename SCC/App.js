@@ -5,6 +5,7 @@ import Startup from "./components/Startup";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import AddEvent from "./components/AddEvent";
+import NewEvent from "./components/NewEvent"
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +30,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Add Event"
-          component={AddEvent}
+          component={NewEvent}
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
