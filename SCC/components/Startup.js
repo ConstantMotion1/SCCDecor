@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import auth from "@react-native-firebase/auth";
-import db from "@react-native-firebase/database";
+//import db from "@react-native-firebase/database";
 
 function Startup({ navigation }) {
   const [email, setEmail] = useState("");
@@ -49,35 +49,35 @@ function Startup({ navigation }) {
   const handleLogin = async () => {
     // Here you can implement your login logic
     if (email && password) {
-      try {
-        const response = await auth().createUserWithEmailAndPassword(
-          email,
-          password
-        );
-
-        if (response.user) {
-          await createProfile(response)
-          navigation.navigate("Home");
+      auth()
+      .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          navigation.navigate("Booked Events");
           Alert.alert("Login", "Logged in successfully");
-        }
-      } catch (error) {
-        Alert.alert("Login", "Invalid email or password");
-        console.log(error);
-      }
+          console.log("User account created & signed in!");
+        })
+        .catch((error) => {
+          if (error.code === "auth/email-already-in-use") {
+            Alert.alert("Login Error", "Email already exists");
+            console.log("That email address is already in use!");
+          }
+          if (error.code === "auth/user-not-found") {
+            Alert.alert("Login Error", "Invalid Credentials");
+            console.log("That email address is already in use!");
+          }
+
+          if (error.code === "auth/invalid-email") {
+            Alert.alert("Login Error", "Invalid email or password");
+            console.log("That email address is invalid!");
+          }
+
+          console.error(error);
+        });
     }
-
-    // auth()
-    // .createUserWithEmailAndPassword(email, password)
-    // .then(userCredentials => {
-    //   const user = userCredentials.user
-    //   console.log(user.email)
-    // })
-    // .catch(error => alert(error.message))
-
   };
 
-  const createProfile =  async (response) => {
-    db().ref(`/users/${response.user.uid}`).set({user})
+ const handleSignup = async () => {
+    navigation.navigate("Signup")
   }
 
   return (
@@ -98,6 +98,10 @@ function Startup({ navigation }) {
             value={password}
           />
           <Button title="Login" onPress={handleLogin} />
+     
+          <Button title="Sign Up" onPress={handleSignup}/>
+        
+        
         </>
       ) : (
         <TouchableOpacity onPress={handleImageClick}>
