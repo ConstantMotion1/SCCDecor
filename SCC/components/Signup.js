@@ -23,9 +23,9 @@ function Signup({ navigation }) {
           auth()
             .createUserWithEmailAndPassword(email, password)
             .then(() => {
-              navigation.navigate("Booked Events");
+              navigation.navigate("Home");
               Alert.alert("Login", "Logged in successfully");
-              console.log("User account created & signed in!");
+              console.log("User account signed in!");
             })
             .catch((error) => {
               if (error.code === "auth/email-already-in-use") {

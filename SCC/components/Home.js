@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Button, Modal, TextInput, Text, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Button, Modal, TextInput, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { TimelineCalendar, EventItem } from '@howljs/calendar-kit';
+import auth from '@react-native-firebase/auth'
 
 
 const Home = ({ navigation }) => {
@@ -34,13 +35,23 @@ const Home = ({ navigation }) => {
   };
 
   const addEvents = () => {
-    navigation.navigate('Add Event')
+    navigation.navigate('NewEvent')
+  }
+
+  const signOut = () => {
+    auth().signOut()
+    .then(() => {
+      console.log('User has been signed out', auth().currentUser)
+      Alert.alert("Signout", "User has been signed out!");
+      navigation.navigate('Startup')
+    })
   }
 
  
   return (
     <SafeAreaView style={styles.container}>
-      <Button title="Add Event" style={styles.addBtn} onPress={addEvents}>+</Button>
+      <Button title="NewEvent" style={styles.addBtn} onPress={addEvents}/>
+      <Button title="Signout" style={styles.addBtn} onPress={signOut}/>
       <TimelineCalendar
        viewMode='week'
        events={events}
