@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
 import { View, Button, Modal, TextInput, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { TimelineCalendar, EventItem } from '@howljs/calendar-kit';
-import auth from '@react-native-firebase/auth'
-
+import auth from '@react-native-firebase/auth';
+import db from "@react-native-firebase/database";
 
 const Home = ({ navigation }) => {
-  
+
+  const allEvents = () => {
+    db().ref('bookings/').on('value', snapshot => {
+      snapshot.val()
+    })
+  }
+console.log(allEvents)
+
+
   const [events, setEvents] = useState([
     {
       id: '1',
       title: 'Event 1',
-      start: '2023-06-14T09:00:05.313Z',
-      end: '2023-06-14T12:00:05.313Z',
+      start: '2023-06-26T09:00:05',
+      end: '2023-06-26T12:00:05',
       color: '#A3C7D6',
     },
     {
       id: '3',
       title: 'Event 3',
-      start: '2023-06-14T09:00:05.313Z',
-      end: '2023-06-14T12:00:05.313Z',
+      start: '2023-06-26T09:00:05',
+      end: '2023-06-26T12:00:05',
       color: '#A3C7D7',
     },
     {
@@ -29,10 +37,6 @@ const Home = ({ navigation }) => {
       color: '#B1AFFF',
     },
   ]);
-
-  const addEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
-  };
 
   const addEvents = () => {
     navigation.navigate('NewEvent')
@@ -54,8 +58,9 @@ const Home = ({ navigation }) => {
       <Button title="Signout" style={styles.addBtn} onPress={signOut}/>
       <TimelineCalendar
        viewMode='week'
-       events={events}
       allowPinchToZoom={true}
+      events={events}
+      timeZone='America/Toronto'
        />
     </SafeAreaView>
   );

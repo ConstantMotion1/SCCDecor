@@ -56,7 +56,7 @@ return (
           />
           <Stack.Screen
             name="NewEvent"
-            component={NewEvent}
+            component={AddEvent}
             options={{ headerShown: true }}
           />
         </>
@@ -66,49 +66,4 @@ return (
 );
 }
 
-// if(!user) {
-//   return (
-//     <NavigationContainer>
-//     <Stack.Navigator>
-//       <Stack.Screen
-//         name="Startup"
-//         component={Startup}
-//         options={{ headerShown: false }}
-//       />
-//       <Stack.Screen
-//         name="Signup"
-//         component={Signup}
-//         options={{ headerShown: false }}
-//       />
-//     </Stack.Navigator>
-//     </NavigationContainer>
-//   )
-// } else {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         <Stack.Screen
-//           name="Startup"
-//           component={Startup}
-//           options={{ headerShown: false }}
-//         />
-//         <Stack.Screen
-//           name="Signup"
-//           component={Signup}
-//           options={{ headerShown: false }}
-//         />
-//         <Stack.Screen
-//           name="Home"
-//           component={Home}
-//           options={{ headerShown: true, headerBackVisible: false }}
-//         />
-//         <Stack.Screen
-//           name="NewEvent"
-//           component={NewEvent}
-//           options={{ headerShown: true }}
-//         />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }}
 
