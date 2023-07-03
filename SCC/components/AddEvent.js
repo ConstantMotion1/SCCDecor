@@ -111,22 +111,38 @@ const AddEvent = () => {
     setEndMode("time");
   };
 
+  function genRandomHexColor() {
+    // Generate a random number between 0 and 16777215 (corresponding to #000000 and #FFFFFF in hex)
+    const randomColor = Math.floor(Math.random() * 16777215);
+  
+    // Convert the decimal color value to hexadecimal
+    const hexColor = "#" + randomColor.toString(16);
+  
+    return hexColor;
+  }
   const handleSubmit = () => {
     console.log("hit");
     try {
+
+      const startISOString = startDate.toISOString();
+      const endISOString = endDate.toISOString();
+      const randomColor = genRandomHexColor()
+
       db()
         .ref(`bookings/${startDate}`)
         .set({
-          id: id,
-          startDate: startDate,
-          endDate: endDate,
-          event: event,
-          clientName: clientName,
-          halls: hall,
-          decor: decor,
-          attendance: attendance,
+          //id: id,
+          start: `${startISOString}`,
+          end: `${endISOString}`,
+          title: event,
+          color: randomColor
+          //clientName: clientName,
+          //halls: hall,
+          //decor: decor,
+          //attendance: attendance,
         });
         setId(id + 1)
+
       console.log("Form submitted");
       console.log(`bookings/${startDate}`);
       Alert.alert("Submit", "The event has been booked!");

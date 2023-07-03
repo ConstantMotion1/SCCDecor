@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, Modal, TextInput, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { TimelineCalendar, EventItem } from '@howljs/calendar-kit';
 import auth from '@react-native-firebase/auth';
@@ -6,37 +6,42 @@ import db from "@react-native-firebase/database";
 
 const Home = ({ navigation }) => {
 
-  const allEvents = () => {
-    db().ref('bookings/').on('value', snapshot => {
-      snapshot.val()
-    })
-  }
-console.log(allEvents)
+  const [events, setEvents] = useState();
 
 
-  const [events, setEvents] = useState([
-    {
-      id: '1',
-      title: 'Event 1',
-      start: '2023-06-26T09:00:05',
-      end: '2023-06-26T12:00:05',
-      color: '#A3C7D6',
-    },
-    {
-      id: '3',
-      title: 'Event 3',
-      start: '2023-06-26T09:00:05',
-      end: '2023-06-26T12:00:05',
-      color: '#A3C7D7',
-    },
-    {
-      id: '2',
-      title: 'Event 2',
-      start: '2023-06-15T11:00:05.313Z',
-      end: '2023-06-15T14:00:05.313Z',
-      color: '#B1AFFF',
-    },
-  ]);
+
+    // db().ref('bookings/').on('value', snapshot => {
+    //   console.log(snapshot.val())
+    //   try {
+    //     const snapshotValue = snapshot.val();
+    //     const eventsArray = snapshotValue ? Object.values(snapshotValue) : [];
+    //     console.log(eventsArray)
+    //     //setEvents(eventsArray);
+    //   } catch (err) {
+    //     console.log("error:" + err)
+    //   }
+      
+    // })
+
+    useEffect(() => {
+      const bookingsRef = db().ref('bookings/');
+      const listener = bookingsRef.on('value', snapshot => {
+        console.log(snapshot.val());
+        try {
+          const snapshotValue = snapshot.val();
+          const eventsArray = snapshotValue ? Object.values(snapshotValue) : [];
+          setEvents(eventsArray);
+        } catch (err) {
+          console.log("error:" + err);
+        }
+      });
+  
+      // Cleanup function to remove the listener when component unmounts
+      return () => {
+        bookingsRef.off('value', listener);
+      };
+    }, [])
+
 
   const addEvents = () => {
     navigation.navigate('NewEvent')
