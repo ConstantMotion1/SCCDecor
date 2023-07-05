@@ -13,7 +13,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import db from "@react-native-firebase/database";
 
-const AddEvent = () => {
+const AddEvent = ({navigation}) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [startMode, setStartMode] = useState("date");
@@ -127,25 +127,28 @@ const AddEvent = () => {
       const startISOString = startDate.toISOString();
       const endISOString = endDate.toISOString();
       const randomColor = genRandomHexColor()
-
+      const newId = id + 1
       db()
         .ref(`bookings/${startDate}`)
+        // .ref("bookings") // Reference the "bookings" node
+        // .push()
         .set({
-          //id: id,
+          //id: newId,
           start: `${startISOString}`,
           end: `${endISOString}`,
           title: event,
-          color: randomColor
-          //clientName: clientName,
-          //halls: hall,
-          //decor: decor,
-          //attendance: attendance,
+          color: randomColor,
+          clientName: clientName,
+          halls: hall,
+          decor: decor,
+          attendance: attendance,
         });
-        setId(id + 1)
-
+        
+        setId(newId)
       console.log("Form submitted");
       console.log(`bookings/${startDate}`);
       Alert.alert("Submit", "The event has been booked!");
+      navigation.navigate('Home')
     } catch (error) {
       console.log(error);
     }

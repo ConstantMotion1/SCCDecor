@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, Modal, TextInput, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
-import { TimelineCalendar, EventItem } from '@howljs/calendar-kit';
+import { TimelineCalendar } from '@howljs/calendar-kit';
+import CurrentEvent from './CurrentEvent';
 import auth from '@react-native-firebase/auth';
 import db from "@react-native-firebase/database";
 
 const Home = ({ navigation }) => {
 
   const [events, setEvents] = useState();
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
       const bookingsRef = db().ref('bookings/');
@@ -29,7 +31,7 @@ const Home = ({ navigation }) => {
 
 
   const addEvents = () => {
-    navigation.navigate('NewEvent')
+    navigation.navigate('AddEvent')
   }
 
   const CurrentEvents = () => {
@@ -45,6 +47,11 @@ const Home = ({ navigation }) => {
     })
   }
 
+  const handleEventPress = (event) => {
+    setSelectedEvent(event)
+    navigation.navigate('CurrentEvent', {event: event})
+  }
+
  
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +61,7 @@ const Home = ({ navigation }) => {
        viewMode='week'
       allowPinchToZoom={true}
       events={events}
-      onLongPressEvent={CurrentEvents}
+      onLongPressEvent={handleEventPress}
       timeZone='America/Toronto'
        />
     </SafeAreaView>
