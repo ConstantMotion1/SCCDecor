@@ -8,21 +8,6 @@ const Home = ({ navigation }) => {
 
   const [events, setEvents] = useState();
 
-
-
-    // db().ref('bookings/').on('value', snapshot => {
-    //   console.log(snapshot.val())
-    //   try {
-    //     const snapshotValue = snapshot.val();
-    //     const eventsArray = snapshotValue ? Object.values(snapshotValue) : [];
-    //     console.log(eventsArray)
-    //     //setEvents(eventsArray);
-    //   } catch (err) {
-    //     console.log("error:" + err)
-    //   }
-      
-    // })
-
     useEffect(() => {
       const bookingsRef = db().ref('bookings/');
       const listener = bookingsRef.on('value', snapshot => {
@@ -47,6 +32,10 @@ const Home = ({ navigation }) => {
     navigation.navigate('NewEvent')
   }
 
+  const CurrentEvents = () => {
+    navigation.navigate('CurrentEvent')
+  }
+
   const signOut = () => {
     auth().signOut()
     .then(() => {
@@ -59,12 +48,13 @@ const Home = ({ navigation }) => {
  
   return (
     <SafeAreaView style={styles.container}>
-      <Button title="NewEvent" style={styles.addBtn} onPress={addEvents}/>
+      <Button title="Add Event" style={styles.addBtn} onPress={addEvents}/>
       <Button title="Signout" style={styles.addBtn} onPress={signOut}/>
       <TimelineCalendar
        viewMode='week'
       allowPinchToZoom={true}
       events={events}
+      onLongPressEvent={CurrentEvents}
       timeZone='America/Toronto'
        />
     </SafeAreaView>

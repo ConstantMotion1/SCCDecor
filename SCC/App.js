@@ -6,7 +6,7 @@ import Startup from "./components/Startup";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import AddEvent from "./components/AddEvent";
-import NewEvent from "./components/NewEvent"
+import CurrentEvent from "./components/CurrentEvent";
 import { useState, useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
@@ -55,8 +55,13 @@ return (
             }}
           />
           <Stack.Screen
-            name="NewEvent"
+            name="AddEvent"
             component={AddEvent}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="CurrentEvent"
+            component={CurrentEvent}
             options={{ headerShown: true }}
           />
         </>
