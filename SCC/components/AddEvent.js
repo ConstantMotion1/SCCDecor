@@ -7,11 +7,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Image
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import db from "@react-native-firebase/database";
+import storage from "@react-native-firebase/storage"
 
 const AddEvent = ({navigation}) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -154,6 +156,8 @@ const AddEvent = ({navigation}) => {
     }
   };
 
+  const reference = storage().ref('images/login.PNG')
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
@@ -256,6 +260,7 @@ const AddEvent = ({navigation}) => {
               onPress={() => setDecor("No")}
               color={decor === "No" ? "blue" : "#CCCCCC"}
             />
+            <Image source={{uri: reference}}></Image>
           </View>
         </View>
         <Button title="Submit" onPress={handleSubmit} />
