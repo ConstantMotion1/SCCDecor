@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  Image
+  Image,
+  ScrollView
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -31,7 +32,9 @@ const AddEvent = ({navigation}) => {
   const [clientName, setClientName] = useState("");
   const [hall, setHall] = useState("");
   const [decor, setDecor] = useState("");
-  const [id, setId] = useState(0); 
+  const [id, setId] = useState(0);
+  const [imageURL, setImageURL] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
@@ -144,6 +147,7 @@ const AddEvent = ({navigation}) => {
           halls: hall,
           decor: decor,
           attendance: attendance,
+          selectedDecor: selectedImages,
         });
         
         setId(newId)
@@ -156,9 +160,40 @@ const AddEvent = ({navigation}) => {
     }
   };
 
-  const reference = storage().ref('images/login.PNG')
+  useEffect(() => {
+    const fetchImagesFromFirebase = async () => {
+      try {
+        const storageRef = storage().ref('images/'); // Replace with your reference (directory) path
+        const imagesSnapshot = await storageRef.listAll();
+        const downloadPromises = imagesSnapshot.items.map((imageRef) =>
+          imageRef.getDownloadURL()
+        );
+        const downloadURLs = await Promise.all(downloadPromises);
+        return downloadURLs;
+      } catch (error) {
+        console.log('Error fetching images from Firebase Storage:', error);
+        return [];
+      }
+    };
+  
+    const getImageURL = async () => {
+      try {
+        const urls = await fetchImagesFromFirebase();
+        console.log('Image URLs:', urls);
+        setImageURL(urls);
+      } catch (error) {
+        console.log('Error getting image URLs:', error);
+      }
+    };
+
+
+    getImageURL();
+  }, []);
+
+  const imageContainerHeight = decor === "Yes" ? 200 : 40;
 
   return (
+    <ScrollView >
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
         <TouchableOpacity onPress={handleStartDateInputClick}>
@@ -260,12 +295,44 @@ const AddEvent = ({navigation}) => {
               onPress={() => setDecor("No")}
               color={decor === "No" ? "blue" : "#CCCCCC"}
             />
-            <Image source={{uri: reference}}></Image>
           </View>
         </View>
+  
+          <View style={[styles.imageContainer, { height: imageContainerHeight }]}>
+            {decor === "Yes" && (
+              <ScrollView horizontal={true}>
+                <View style={styles.imageScrollContainer}>
+                  {imageURL.map((url, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        const isSelected = selectedImages.includes(url);
+
+                        if (isSelected) {
+                          setSelectedImages(selectedImages.filter(image => image !== url));
+                        } else {
+                          setSelectedImages([...selectedImages, url]);
+                        }
+                      }}
+                    >
+                      <Image
+                        source={{ uri: url }}
+                        style={[
+                          styles.image,
+                          selectedImages.includes(url) && styles.selectedImage,
+                        ]}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            )}
+          </View>
+
         <Button title="Submit" onPress={handleSubmit} />
       </View>
     </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -275,6 +342,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  imageContainer: {
+    height: 40, // Adjust the height as per your requirement
+  },
+  imageScrollContainer: {
+    flexDirection: "row",
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginRight: 8,
   },
   text: {
     fontWeight: "bold",

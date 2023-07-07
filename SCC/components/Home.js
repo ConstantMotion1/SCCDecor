@@ -34,10 +34,6 @@ const Home = ({ navigation }) => {
     navigation.navigate('AddEvent')
   }
 
-  const CurrentEvents = () => {
-    navigation.navigate('CurrentEvent')
-  }
-
   const signOut = () => {
     auth().signOut()
     .then(() => {
