@@ -36,17 +36,18 @@ const AddEvent = ({navigation}) => {
   const [imageURL, setImageURL] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
 
+  function formatDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+    const year = date.getFullYear();
+  
+    return `${day}/${month}/${year}`;
+  }
+
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
     setStartShow(Platform.OS === "ios");
     setStartDate(currentDate);
-    function formatDate(date) {
-      const day = date.getDate();
-      const month = date.getMonth() + 1; // Months are zero-based, so we add 1
-      const year = date.getFullYear();
-    
-      return `${day}/${month}/${year}`;
-    }
     const fetchDate = formatDate(currentDate)    
     fetchBookings(fetchDate)
 
@@ -138,8 +139,6 @@ const AddEvent = ({navigation}) => {
   const allBookings = []
 
   const fetchBookings = async (selectedDate) => {
-
-    console.log("STARTDATE:" + selectedDate)
     try {
       const snapshot = await db()
         .ref(`bookings`)
@@ -161,20 +160,11 @@ const AddEvent = ({navigation}) => {
   const handleSubmit = () => {
     console.log("hit");
     try {
-
-      function formatDate(date) {
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // Months are zero-based, so we add 1
-        const year = date.getFullYear();
-      
-        return `${day}/${month}/${year}`;
-      }
       
       const startISOString = startDate.toISOString();
       const endISOString = endDate.toISOString();
       const randomColor = genRandomHexColor()
       const Id = formatDate(startDate)
-      console.log("ID DATE:" + Id)
       db()
         .ref(`bookings`)
         // .ref("bookings") // Reference the "bookings" node
