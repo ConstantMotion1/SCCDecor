@@ -40,6 +40,15 @@ const AddEvent = ({navigation}) => {
     const currentDate = selectedDate || startDate;
     setStartShow(Platform.OS === "ios");
     setStartDate(currentDate);
+    function formatDate(date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+      const year = date.getFullYear();
+    
+      return `${day}/${month}/${year}`;
+    }
+    const fetchDate = formatDate(currentDate)    
+    fetchBookings(fetchDate)
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -125,20 +134,53 @@ const AddEvent = ({navigation}) => {
   
     return hexColor;
   }
+
+  const allBookings = []
+
+  const fetchBookings = async (selectedDate) => {
+
+    console.log("STARTDATE:" + selectedDate)
+    try {
+      const snapshot = await db()
+        .ref(`bookings`)
+        .orderByChild('id')
+        .startAt(selectedDate)
+        .once("value");
+  
+      const bookingsObj = snapshot.val();
+      const bookings = Object.values(bookingsObj || {});
+  
+      console.log("Bookings for Start Date:", bookings);
+    } catch (error) {
+      console.log("Error fetching bookings:", error);
+    }
+  };
+  
+  
+
   const handleSubmit = () => {
     console.log("hit");
     try {
 
+      function formatDate(date) {
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+        const year = date.getFullYear();
+      
+        return `${day}/${month}/${year}`;
+      }
+      
       const startISOString = startDate.toISOString();
       const endISOString = endDate.toISOString();
       const randomColor = genRandomHexColor()
-      const newId = id + 1
+      const Id = formatDate(startDate)
+      console.log("ID DATE:" + Id)
       db()
-        .ref(`bookings/${startDate}`)
+        .ref(`bookings`)
         // .ref("bookings") // Reference the "bookings" node
-        // .push()
+        .push()
         .set({
-          //id: newId,
+          id: Id,
           start: `${startISOString}`,
           end: `${endISOString}`,
           title: event,
@@ -150,7 +192,7 @@ const AddEvent = ({navigation}) => {
           selectedDecor: selectedImages,
         });
         
-        setId(newId)
+        
       console.log("Form submitted");
       console.log(`bookings/${startDate}`);
       Alert.alert("Submit", "The event has been booked!");
@@ -179,7 +221,7 @@ const AddEvent = ({navigation}) => {
     const getImageURL = async () => {
       try {
         const urls = await fetchImagesFromFirebase();
-        console.log('Image URLs:', urls);
+        //console.log('Image URLs:', urls);
         setImageURL(urls);
       } catch (error) {
         console.log('Error getting image URLs:', error);
@@ -297,6 +339,8 @@ const AddEvent = ({navigation}) => {
             />
           </View>
         </View>
+
+
   
           <View style={[styles.imageContainer, { height: imageContainerHeight }]}>
             {decor === "Yes" && (
@@ -328,6 +372,12 @@ const AddEvent = ({navigation}) => {
               </ScrollView>
             )}
           </View>
+
+
+
+
+
+
 
         <Button title="Submit" onPress={handleSubmit} />
       </View>
@@ -368,7 +418,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 8,
-  },
+  }
 });
 
 export default AddEvent;
