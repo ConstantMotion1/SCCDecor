@@ -6,6 +6,7 @@ import Startup from "./components/Startup";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import AddEvent from "./components/AddEvent";
+import Test from "./components/Test"
 import CurrentEvent from "./components/CurrentEvent";
 import { useState, useEffect } from "react";
 
@@ -61,7 +62,7 @@ return (
           />
           <Stack.Screen
             name="CurrentEvent"
-            component={CurrentEvent}
+            component={Test}
             options={{ headerShown: true }}
           />
         </>

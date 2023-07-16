@@ -256,6 +256,8 @@ const AddEvent = ({ navigation }) => {
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.section}>
+        <Text style={styles.heading} >Event Starts</Text>
+        <View style={styles.row}>
           <TouchableOpacity onPress={handleStartDateInputClick}>
             <TextInput
               style={styles.input}
@@ -270,6 +272,7 @@ const AddEvent = ({ navigation }) => {
               editable={false}
             />
           </TouchableOpacity>
+          </View>
           {startShow && (
             <DateTimePicker
               testID="startDateTimePicker"
@@ -286,6 +289,8 @@ const AddEvent = ({ navigation }) => {
           )}
         </View>
         <View style={styles.section}>
+        <Text style={styles.heading} >Event Ends</Text>
+        <View style={styles.row}>
           <TouchableOpacity onPress={handleEndDateInputClick}>
             <TextInput style={styles.input} value={endText} editable={false} />
           </TouchableOpacity>
@@ -296,6 +301,7 @@ const AddEvent = ({ navigation }) => {
               editable={false}
             />
           </TouchableOpacity>
+          </View>
           {endShow && (
             <DateTimePicker
               testID="endDateTimePicker"
@@ -310,6 +316,7 @@ const AddEvent = ({ navigation }) => {
           )}
         </View>
         <View style={styles.formContainer}>
+        <Text style={styles.heading} >Event Information</Text>
           <View style={styles.section}>
             <TextInput
               style={styles.input}
@@ -343,18 +350,20 @@ const AddEvent = ({ navigation }) => {
             />
           </View>
           <View style={styles.section}>
-            <Text>Decor:</Text>
-            <View>
-              <Button
-                title="Yes"
-                onPress={() => setDecor("Yes")}
-                color={decor === "Yes" ? "blue" : "#CCCCCC"}
-              />
-              <Button
-                title="No"
-                onPress={() => setDecor("No")}
-                color={decor === "No" ? "blue" : "#CCCCCC"}
-              />
+            <Text style={styles.heading} >Decor</Text>
+            <View style={styles.row} >
+                <TouchableOpacity
+                style={styles.button}
+                       onPress={() => setDecor("Yes")}
+                       color={decor === "Yes" ? "#FFD700" : "#CCCCCC"}>
+                    <Text style={styles.buttonText}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                style={styles.button}
+                  onPress={() => setDecor("No")}
+                  color={decor === "No" ? "#FFD700" : "#CCCCCC"}>
+                    <Text style={styles.buttonText}>No</Text>
+                </TouchableOpacity>
             </View>
           </View>
 
@@ -392,8 +401,12 @@ const AddEvent = ({ navigation }) => {
               </ScrollView>
             )}
           </View>
-
-          <Button title="Submit" onPress={handleSubmit} />
+<View style={styles.btnContainer}>
+<TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+          <Text style={styles.submitbtntext}>Submit</Text>
+        </TouchableOpacity>
+</View>
+      
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -401,42 +414,105 @@ const AddEvent = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  selectedImage: {
-    borderColor: "blue",
-    borderWidth: 2,
-  },
-  imageContainer: {
-    height: 40, // Adjust the height as per your requirement
-  },
-  imageScrollContainer: {
-    flexDirection: "row",
-  },
-  image: {
-    width: 150,
-    height: 150,
-    marginRight: 8,
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  formContainer: {
-    padding: 16,
-  },
-  section: {
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 8,
-  },
-});
+    container: {
+      flex: 1,
+      backgroundColor: "#2c3032",
+      padding: 30
+    },
+    selectedImage: {
+      borderColor: "#FFD700",
+      borderWidth: 2,
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+      },
+    imageContainer: {
+      height: 40, // Adjust the height as per your requirement
+    },
+    imageScrollContainer: {
+      flexDirection: "row",
+    },
+    heading: {
+        color: 'white',
+        marginBottom: 10,
+        fontWeight: 'bold',
+        textAlign: "center"
+    },
+    btn: {
+        flex: 1,
+        padding: 20
 
+    },
+    image: {
+      width: 150,
+      height: 150,
+      marginRight: 8,
+      borderRadius: 10
+    },
+    text: {
+      fontWeight: "bold",
+      fontSize: 20,
+    },
+    formContainer: {
+      padding: 16,
+    },
+    section: {
+      marginBottom: 16
+    },
+    input: {
+      height: 40,
+      borderColor: "#FFD700",
+      borderWidth: 1,
+      marginBottom: 12,
+      paddingHorizontal: 8,
+      color: "#2c3032",
+      backgroundColor: "#fff",
+      borderRadius: 15
+    },
+    button: {
+        width: "50%",
+        paddingVertical: 10,
+        borderRadius: 30,
+        marginBottom: 15,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      submitBtn: {
+        width: "50%",
+        backgroundColor: "#FFD700",
+        paddingVertical: 10,
+        borderRadius: 30,
+        marginBottom: 15,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        textAlign: "center",
+      },
+      submitbtntext: {
+        color: "black",
+        fontWeight: "bold",
+        textAlign: "center",
+      }
+  });
 export default AddEvent;
