@@ -1,9 +1,25 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
+import { Text, View, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Card } from "react-native-paper";
+import db from "@react-native-firebase/database";
 
-function CurrentEvent({ route }) {
+function CurrentEvent({ route, navigation }) {
   const { event } = route.params;
+  console.log('THE EVENT',event.key)
+
+  const handleDelete = () => {
+    const deleteRef = db().ref(`bookings/${event.key}`);
+    deleteRef.remove()
+      .then(() => {
+        Alert.alert("Delete", "The event has been deleted!");
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        console.log("Error deleting data:", error);
+        // Handle error, if any
+      });
+  }
+  
 
   return (
     <ScrollView>
@@ -51,6 +67,9 @@ function CurrentEvent({ route }) {
           </View>
         </Card.Content>
       </Card>
+      <TouchableOpacity onPress={handleDelete} style={styles.deletebtncontainer}>
+      <Text style={styles.deleteBtn}>Delete Booking</Text>
+    </TouchableOpacity>
     </View>
     </ScrollView>
     
@@ -100,6 +119,22 @@ const styles = StyleSheet.create({
     height: 100,
     margin: 10,
   },
+  deleteBtn: {
+    color: "black",
+    backgroundColor: "red",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
+   textAlign: "center",
+    width: 120,
+    height: 30,
+    fontWeight: "bold",
+    borderRadius: 20,
+  },
+  deletebtncontainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  }
 });
 
 export default CurrentEvent;

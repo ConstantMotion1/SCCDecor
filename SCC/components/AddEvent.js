@@ -196,23 +196,25 @@ const AddEvent = ({ navigation }) => {
       const endISOString = endDate.toISOString();
       const randomColor = genRandomHexColor();
       const Id = formatDate(startDate);
-      db()
-        .ref(`bookings`)
-        // .ref("bookings") // Reference the "bookings" node
-        .push()
-        .set({
-          id: Id,
-          start: `${startISOString}`,
-          end: `${endISOString}`,
-          title: event,
-          color: randomColor,
-          clientName: clientName,
-          halls: hall,
-          decor: decor,
-          attendance: attendance,
-          selectedDecor: selectedImages,
-        });
-
+      const newDataRef = db().ref("bookings").push();
+      const newKey = newDataRef.key;
+  
+      const data = {
+        id: Id,
+        start: startISOString,
+        end: endISOString,
+        title: event,
+        color: randomColor,
+        clientName: clientName,
+        halls: hall,
+        decor: decor,
+        attendance: attendance,
+        selectedDecor: selectedImages,
+        key: newKey,
+      };
+  
+      newDataRef.set(data);
+  
       console.log("Form submitted");
       Alert.alert("Submit", "The event has been booked!");
       navigation.navigate("Home");
@@ -220,6 +222,7 @@ const AddEvent = ({ navigation }) => {
       console.log(error);
     }
   };
+  
 
   useEffect(() => {
     const fetchImagesFromFirebase = async () => {
