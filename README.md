@@ -1,6 +1,6 @@
 # SCCDecor
 ## Description
-SCC Decor is a mobile app developed using React Native with the Expo CLient. This app is for internal use for employees employed with the Scarborough Convention Center.
+SCC Decor is a mobile app developed using React Native with the Expo Client. This app is for internal use for employees employed with the Scarborough Convention Center.
 
 This is a work in progress and the UI will not reflect the final product.
   
