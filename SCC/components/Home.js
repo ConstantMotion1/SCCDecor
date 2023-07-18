@@ -49,7 +49,6 @@ const Home = ({ navigation }) => {
       .then(() => {
         console.log("User has been signed out", auth().currentUser);
         Alert.alert("Signout", "User has been signed out!");
-        navigation.navigate("Startup");
       });
   };
 
