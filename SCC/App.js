@@ -8,6 +8,7 @@ import Signup from "./components/Signup";
 import AddEvent from "./components/AddEvent";
 import Test from "./components/Test";
 import CurrentEvent from "./components/CurrentEvent";
+import UpdateCurrent from "./components/UpdateCurrent";
 import { useState, useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,11 @@ return (
           <Stack.Screen
             name="CurrentEvent"
             component={CurrentEvent}
+            options={{ headerShown: true }}
+          />
+              <Stack.Screen
+            name="UpdateCurrent"
+            component={UpdateCurrent}
             options={{ headerShown: true }}
           />
         </>

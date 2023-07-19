@@ -19,6 +19,10 @@ function CurrentEvent({ route, navigation }) {
         // Handle error, if any
       });
   }
+
+  const handleUpdate = () => {
+    navigation.navigate('UpdateCurrent', event)
+  }
   
 
   return (
@@ -67,9 +71,15 @@ function CurrentEvent({ route, navigation }) {
           </View>
         </Card.Content>
       </Card>
-      <TouchableOpacity onPress={handleDelete} style={styles.deletebtncontainer}>
+      <View style={styles.btncontainer}>
+      <TouchableOpacity onPress={handleDelete}>
       <Text style={styles.deleteBtn}>Delete Booking</Text>
     </TouchableOpacity>
+    <TouchableOpacity onPress={handleUpdate}>
+      <Text style={styles.updateBtn}>Update Booking</Text>
+    </TouchableOpacity>
+      </View>
+ 
     </View>
     </ScrollView>
     
@@ -130,7 +140,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     borderRadius: 20,
   },
-  deletebtncontainer: {
+  updateBtn: {
+    color: "black",
+    backgroundColor: "blue",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
+   textAlign: "center",
+    width: 120,
+    height: 30,
+    fontWeight: "bold",
+    borderRadius: 20,
+  },
+  btncontainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
